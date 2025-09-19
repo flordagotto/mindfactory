@@ -13,3 +13,5 @@
             /domain-validator.ts
             /specifics-validators.ts
             ...
+
+También aproveché para consultar sobre librerías que me faciliten el trabajo de validación. En .NET uso FluentValidations que es muy útil para las validaciones a nivel de datos (lo que pude implementar con class-validator), y luego en los servicios implemento validaciones a nivel de negocio.
