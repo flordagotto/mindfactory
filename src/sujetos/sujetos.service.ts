@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Sujeto } from './domain/sujeto.entity';
@@ -12,7 +12,15 @@ export class SujetosService {
     private readonly sujetoRepository: Repository<Sujeto>,
   ) {}
 
-  create(dto: CreateSujetoDto) {
+  async create(dto: CreateSujetoDto) {
+    const existing = await this.sujetoRepository.findOne({
+      where: { cuit: dto.spo_cuit },
+    });
+
+    if (existing) {
+      throw new UnprocessableEntityException(`Ya existe un sujeto con CUIT ${dto.spo_cuit}`);
+    }
+
     const sujeto: Partial<Sujeto> = {
         cuit: dto.spo_cuit,
         denominacion: dto.spo_denominacion,

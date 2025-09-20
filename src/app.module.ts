@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AutomotoresModule } from './automotores/automotores.module';
 import { SujetosModule } from './sujetos/sujetos.module';
 import { ObjetoDeValorModule } from './objeto-de-valor/objeto-de-valor.module';
-import { VinculoSujetoObjeto } from './vinculo-sujeto-objeto/domain/vinculo-sujeto-objeto.entity';
 import { VinculoSujetoObjetoModule } from './vinculo-sujeto-objeto/vinculo-sujeto-objeto.module';
 
 @Module({
