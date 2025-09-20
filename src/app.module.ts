@@ -2,13 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AutomotoresModule } from './automotores/automotores.module';
 import { SujetosModule } from './sujetos/sujetos.module';
-import { ObjetoDeValorController } from './objeto-de-valor/objeto-de-valor.controller';
-import { ObjetoDeValorService } from './objeto-de-valor/objeto-de-valor.service';
 import { ObjetoDeValorModule } from './objeto-de-valor/objeto-de-valor.module';
-import { SujetosController } from './sujetos/sujetos.controller';
-import { SujetosService } from './sujetos/sujetos.service';
-import { AutomotoresService } from './automotores/automotores.service';
-import { AutomotoresController } from './automotores/automotores.controller';
+import { VinculoSujetoObjeto } from './vinculo-sujeto-objeto/domain/vinculo-sujeto-objeto.entity';
+import { VinculoSujetoObjetoModule } from './vinculo-sujeto-objeto/vinculo-sujeto-objeto.module';
 
 @Module({
   imports: [
@@ -20,13 +16,12 @@ import { AutomotoresController } from './automotores/automotores.controller';
       password: 'postgres',
       database: 'mindfactory',
       autoLoadEntities: true,  
-      synchronize: true,       
+      synchronize: false,       
     }),
     AutomotoresModule,
     SujetosModule,
     ObjetoDeValorModule,
-  ],
-  controllers: [SujetosController, ObjetoDeValorController, AutomotoresController],
-  providers: [SujetosService, ObjetoDeValorService, AutomotoresService],
+    VinculoSujetoObjetoModule
+  ]
 })
 export class AppModule {}

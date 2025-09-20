@@ -1,4 +1,4 @@
-import { NumberIsIntegerPositive } from '../common/validators/validator';
+import { NumberIsIntegerPositive } from '../../common/validators/validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateAutomotorDto } from './create-automotor.dto';
 
