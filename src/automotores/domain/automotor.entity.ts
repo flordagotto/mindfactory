@@ -1,7 +1,10 @@
+import { ObjetoDeValor } from 'src/objeto-de-valor/domain/objeto-de-valor.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('Automotores') 
@@ -29,4 +32,8 @@ export class Automotor {
 
   @Column({ name: 'atr_fecha_alta_registro', type: 'timestamptz' })
   fechaAltaRegistro: Date;
+  
+  @OneToOne(() => ObjetoDeValor, (ovp) => ovp.automotor, { cascade: true })
+  @JoinColumn({ name: 'atr_ovp_id' })
+  objetoValor: ObjetoDeValor;
 }

@@ -1,9 +1,11 @@
+import { VinculoSujetoObjeto } from 'src/vinculo-sujeto-objeto/domain/vinculo-sujeto-objeto.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('Sujeto')
@@ -22,4 +24,11 @@ export class Sujeto {
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
+  
+  @OneToMany(
+    () => VinculoSujetoObjeto,
+    (vinculo) => vinculo.objetoValor,
+  )
+  
+  vinculos: VinculoSujetoObjeto[];
 }
