@@ -12,7 +12,7 @@ export class Automotor {
   @PrimaryGeneratedColumn({ name: 'atr_id', type: 'bigint' })
   id: number;
 
-  @Column({ name: 'atr_ovp_id', type: 'int', length: 8 })
+  @Column({ name: 'atr_ovp_id', type: 'int' })
   atr_ovp_id: number;
 
   @Column({ name: 'atr_dominio', type: 'varchar', length: 8 })
@@ -27,7 +27,7 @@ export class Automotor {
   @Column({ name: 'atr_color', type: 'varchar', length: 40 })
   color: string;
 
-  @Column({ name: 'atr_fecha_fabricacion', type: 'int', length: 4 })
+  @Column({ name: 'atr_fecha_fabricacion', type: 'int' })
   fechaFabricacion: number;
 
   @Column({ name: 'atr_fecha_alta_registro', type: 'timestamptz' })

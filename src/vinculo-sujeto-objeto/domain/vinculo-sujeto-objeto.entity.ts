@@ -13,10 +13,10 @@ export class VinculoSujetoObjeto {
   @PrimaryGeneratedColumn({ name: 'vso_id', type: 'bigint' })
   id: number;
 
-  @Column({ name: 'vso_ovp_id', type: 'int', length: 8 })
+  @Column({ name: 'vso_ovp_id', type: 'int' })
   ovpId: number;
 
-  @Column({ name: 'vso_spo_id', type: 'int', length: 8 })
+  @Column({ name: 'vso_spo_id', type: 'int' })
   spoId: number;
 
   @Column({ name: 'vso_tipo_vinculo', type: 'varchar', length: 30 })

@@ -1,8 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateSujetoDto } from './create-sujeto.dto';
-import { NumberIsIntegerPositive } from 'src/automotores/common/validators/validator';
+import { NumberIsIntegerPositive } from 'src/common/validators/validator';
 
 export class SujetoDto extends PartialType(CreateSujetoDto) {
       @NumberIsIntegerPositive()
-      atr_id: number;
+      spo_id: number;
 }
