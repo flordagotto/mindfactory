@@ -16,4 +16,4 @@
 
 También aproveché para consultar sobre librerías que me faciliten el trabajo de validación. En .NET uso FluentValidations que es muy útil para las validaciones a nivel de datos (lo que pude implementar con class-validator), y luego en los servicios implemento validaciones a nivel de negocio.
 
-2. No tuve muchas oportunidades de trabajar con XML y al ser un lenguaje poco utilizado, necesité algo de ayuda de la IA para leer el archivo XML, para ver que no se me estuviera pasando ningún requerimiento.
+2. No tuve muchas oportunidades de trabajar con XML y al ser un lenguaje poco utilizado, necesité algo de ayuda de la IA para leer el archivo XML, para ver que no se me estuviera pasando ningún requerimiento, y por ejemplo para traducir el método para validar el CUIT.

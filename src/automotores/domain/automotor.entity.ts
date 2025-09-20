@@ -1,10 +1,32 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+} from 'typeorm';
+
+@Entity('Automotores') 
 export class Automotor {
-    atr_id: number;
-    atr_ovp_id: number;
-    atr_dominio: string;
-    atr_numero_chasis: string;
-    atr_numero_motor: string;
-    atr_color: string;
-    atr_fecha_fabricacion: number;
-    atr_fecha_alto_registro: Date;
+  @PrimaryGeneratedColumn({ name: 'atr_id', type: 'bigint' })
+  id: number;
+
+  @Column({ name: 'atr_ovp_id', type: 'int', length: 8 })
+  atr_ovp_id: number;
+
+  @Column({ name: 'atr_dominio', type: 'varchar', length: 8 })
+  dominio: string;
+
+  @Column({ name: 'atr_numero_chasis', type: 'varchar', length: 25 })
+  numeroChasis: string;
+
+  @Column({ name: 'atr_numero_motor', type: 'varchar', length: 25 })
+  numeroMotor: string;
+
+  @Column({ name: 'atr_color', type: 'varchar', length: 40 })
+  color: string;
+
+  @Column({ name: 'atr_fecha_fabricacion', type: 'int', length: 4 })
+  fechaFabricacion: number;
+
+  @Column({ name: 'atr_fecha_alta_registro', type: 'timestamptz' })
+  fechaAltaRegistro: Date;
 }
