@@ -4,5 +4,5 @@ import { NumberIsIntegerPositive } from 'src/automotores/common/validators/valid
 
 export class SujetoDto extends PartialType(CreateSujetoDto) {
       @NumberIsIntegerPositive()
-      atr_id: number;
+      spo_id: number;
 }

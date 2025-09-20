@@ -30,5 +30,5 @@ export class Sujeto {
     (vinculo) => vinculo.objetoValor,
   )
   
-  vinculos: VinculoSujetoObjeto[];
+  vinculos: VinculoSujetoObjeto[] | null;
 }
