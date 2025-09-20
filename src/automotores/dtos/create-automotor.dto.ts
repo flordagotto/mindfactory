@@ -1,5 +1,6 @@
 import { IsString, Matches, IsOptional, MaxLength, IsDate } from 'class-validator';
-import { VehicleDomainIsValid, NumberIsIntegerPositive, DateIsValid } from '../validators/automotores.validator';
+import { VehicleDomainIsValid, DateIsValid } from '../validators/automotores.validator';
+import { NumberIsIntegerPositive } from '../common/validators/validator';
 
 export class CreateAutomotorDto {
   @IsString()
