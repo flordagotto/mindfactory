@@ -39,9 +39,9 @@ export class SujetosService {
     }
 
     var sujetoDto: SujetoDto = {
-        spo_id: sujetoEntity.id,
-        spo_cuit: sujetoEntity.cuit,
-        spo_denominacion: sujetoEntity.denominacion
+        id: sujetoEntity.id,
+        cuit: sujetoEntity.cuit,
+        denominacion: sujetoEntity.denominacion
     }
 
     return sujetoDto;

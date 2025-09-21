@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateVinculoSujetoObjetoDto } from './create-vinculo-sujeto-objeto.dto';
-
-export class VinculoSujetoObjetoDto extends PartialType(CreateVinculoSujetoObjetoDto) {}
+export class VinculoSujetoObjetoDto {
+    tipoVinculo: string;
+    porcentaje: number;
+    responsable: string;
+    fechaInicio: Date;
+    fechaFin?: Date;
+}

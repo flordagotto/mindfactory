@@ -1,0 +1,2 @@
+FECHA_FABRICACION se define como NUMBER(6) en formato YYYYMM (ej: 202509).
+Pero en los scripts de PostgreSQL ese campo se guarda como int(4), por lo que no se puede guardar la fecha completa. No sería mejor usar un varchar?
