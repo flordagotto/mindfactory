@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Automotor } from './domain/automotor.entity';
 import { ObjetoDeValor } from 'src/objeto-de-valor/domain/objeto-de-valor.entity';
@@ -16,22 +16,51 @@ export class AutomotoresService {
         @InjectRepository(Sujeto) private sujetoRepo: Repository<Sujeto>,
     ) {}
 
-    async create(dto: CreateAutomotorDto) {
-        const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.spo_cuit });
-        if (!sujeto) throw new UnprocessableEntityException('No existe sujeto con ese CUIT');
+  async createAutomotor(dto: CreateAutomotorDto) {
+    await this.validateDominio(dto.dominio);
 
-        this.validateFechaFabricacion(dto.fecha_fabricacion);
+    const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.spo_cuit });
+    if (!sujeto) throw new UnprocessableEntityException('No existe sujeto con ese CUIT');
 
-        let objeto = await this.objetoRepo.findOne({ where: { tipo: 'AUTOMOTOR', codigo: dto.dominio } });
+    this.validateFechaFabricacion(dto.fecha_fabricacion);
 
-        if (!objeto) {
-            objeto = this.objetoRepo.create({ tipo: 'AUTOMOTOR', codigo: dto.dominio, descripcion: `Automotor ${dto.dominio}` });
-            objeto = await this.objetoRepo.save(objeto);
-        }
+    let objeto = await this.objetoRepo.findOne({ where: { tipo: 'AUTOMOTOR', codigo: dto.dominio } });
 
-        await this.updateOrCreateAutomotor(dto, objeto);
-        await this.closePreviousVinculo(objeto);
-        await this.createNewVinculo(objeto, sujeto);
+    if (!objeto) {
+        objeto = this.objetoRepo.create({ tipo: 'AUTOMOTOR', codigo: dto.dominio, descripcion: `Automotor ${dto.dominio}` });
+        objeto = await this.objetoRepo.save(objeto);
+    }
+
+    await this.createAutomotorEntity(dto, objeto);
+    await this.setNewOwnerToObjetoDeValor(objeto, sujeto);
+  }
+
+  async updateAutomotor(dominio: string, dto: CreateAutomotorDto){
+    let automotor = await this.automotorRepo.findOne({ where: { dominio: dto.dominio }, relations: ['objetoValor'] });
+        
+    if (!automotor) throw new NotFoundException(`Automotor con dominio ${dominio} no encontrado`);
+    
+    const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.spo_cuit });
+    if (!sujeto) throw new UnprocessableEntityException('No existe sujeto con ese CUIT');
+
+    let objeto = await this.objetoRepo.findOne({ where: { tipo: 'AUTOMOTOR', codigo: dto.dominio } });
+    if (!objeto) throw new UnprocessableEntityException('No existe objeto de valor asociado al automotor');
+
+    this.validateFechaFabricacion(dto.fecha_fabricacion);
+
+    automotor.numeroChasis = dto.numero_chasis;
+    automotor.numeroMotor = dto.numero_motor;
+    automotor.color = dto.color;
+    automotor.fechaFabricacion = dto.fecha_fabricacion;
+
+    automotor = await this.automotorRepo.save(automotor);
+    
+    await this.setNewOwnerToObjetoDeValor(objeto, sujeto);
+  }
+
+  private async setNewOwnerToObjetoDeValor(objeto: ObjetoDeValor, sujeto: Sujeto){
+    await this.closePreviousVinculo(objeto);
+    await this.createNewVinculo(objeto, sujeto);
   }
 
   private validateFechaFabricacion(fecha_fabricacion: number){
@@ -45,24 +74,15 @@ export class AutomotoresService {
     }
   }
 
-  private async updateOrCreateAutomotor(dto: CreateAutomotorDto, objeto: ObjetoDeValor){
-    let automotor = await this.automotorRepo.findOne({ where: { dominio: dto.dominio }, relations: ['objetoValor'] });
-        
-    if (automotor) {
-        automotor.numeroChasis = dto.numero_chasis;
-        automotor.numeroMotor = dto.numero_motor;
-        automotor.color = dto.color;
-        automotor.fechaFabricacion = dto.fecha_fabricacion;
-    } else {
-        automotor = this.automotorRepo.create({
-            dominio: dto.dominio,
-            numeroChasis: dto.numero_chasis,
-            numeroMotor: dto.numero_motor,
-            color: dto.color,
-            fechaFabricacion: dto.fecha_fabricacion,
-            objetoValor: objeto,
-        });
-    }
+  private async createAutomotorEntity(dto: CreateAutomotorDto, objeto: ObjetoDeValor){
+    let automotor = this.automotorRepo.create({
+      dominio: dto.dominio,
+      numeroChasis: dto.numero_chasis,
+      numeroMotor: dto.numero_motor,
+      color: dto.color,
+      fechaFabricacion: dto.fecha_fabricacion,
+      objetoValor: objeto,
+    });
     
     automotor = await this.automotorRepo.save(automotor);
   }
@@ -87,5 +107,10 @@ export class AutomotoresService {
     });
 
     await this.vinculoRepo.save(vinculo);
+  }
+
+  private async validateDominio(dominio: string){
+    const automotor = await this.automotorRepo.findOne({ where: { dominio: dominio } });
+    if (automotor) throw new UnprocessableEntityException(`Ya existe un automotor con el dominio ${dominio}`);
   }
 }
