@@ -10,7 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-@Entity('ObjetoDeValor') 
+@Entity('Objeto_De_Valor') 
 export class ObjetoDeValor {
   @PrimaryGeneratedColumn({ name: 'ovp_id', type: 'bigint' })
   id: number;

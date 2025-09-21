@@ -6,6 +6,7 @@ import {
   Column,
   CreateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('Vinculo_Sujeto_Objeto')
@@ -38,8 +39,10 @@ export class VinculoSujetoObjeto {
   createdAt: Date;
 
   @ManyToOne(() => ObjetoDeValor, (ovp) => ovp.vinculos)
+  @JoinColumn({ name: 'vso_ovp_id' }) 
   objetoValor: ObjetoDeValor;
 
   @ManyToOne(() => Sujeto, (sujeto) => sujeto.vinculos)
+  @JoinColumn({ name: 'vso_spo_id' })
   sujeto: Sujeto;
 }

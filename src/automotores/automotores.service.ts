@@ -78,8 +78,8 @@ export class AutomotoresService {
 
   private async createNewVinculo(objeto: ObjetoDeValor, sujeto: Sujeto){
     const vinculo = this.vinculoRepo.create({
-      objetoValor: objeto,
-      sujeto,
+      ovpId: objeto.id,
+      spoId: sujeto.id,
       tipoVinculo: 'DUENO',
       porcentaje: 100,
       responsable: 'S',
