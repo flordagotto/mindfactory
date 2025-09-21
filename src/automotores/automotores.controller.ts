@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Put, Query } from '@nestjs/common';
 import { AutomotoresService } from './automotores.service';
 import { CreateAutomotorDto } from './dtos/create-automotor.dto';
+import { UpdateAutomotorDto } from './dtos/update-automotor.dto';
 
 @Controller('automotores')
 export class AutomotoresController {
@@ -12,7 +13,7 @@ export class AutomotoresController {
   }
 
   @Put()
-  update(@Query('dominio') dominio: string, @Body() dto: CreateAutomotorDto) {
+  update(@Query('dominio') dominio: string, @Body() dto: UpdateAutomotorDto) {
     return this.automotoresService.updateAutomotor(dominio, dto);
   }
 }

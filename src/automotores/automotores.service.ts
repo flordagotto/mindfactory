@@ -44,11 +44,23 @@ export class AutomotoresService {
     const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.cuitDuenio });
     if (!sujeto) throw new UnprocessableEntityException('No existe sujeto con ese CUIT');
 
-    let objeto = await this.objetoRepo.findOne({ where: { tipo: 'AUTOMOTOR', codigo: dominio } });
+    let objeto = await this.objetoRepo.findOne({ 
+      where: { tipo: 'AUTOMOTOR', codigo: dominio },
+      relations: ['vinculos', 'vinculos.sujeto']
+    });
     if (!objeto) throw new UnprocessableEntityException('No existe objeto de valor asociado al automotor');
 
     await this.updateAutomotorEntity(dto, automotor);
-    await this.setNewOwnerToObjetoDeValor(objeto, sujeto);
+
+    const activeVinculo = objeto.vinculos.find(
+      (v) => v.fechaFin === null || v.fechaFin === undefined
+    );
+
+    if (activeVinculo) {
+      if (activeVinculo.sujeto.cuit !== dto.cuitDuenio) {
+        await this.setNewOwnerToObjetoDeValor(objeto, sujeto);
+      }
+    }
   }
 
   private async setNewOwnerToObjetoDeValor(objeto: ObjetoDeValor, sujeto: Sujeto){
@@ -56,10 +68,9 @@ export class AutomotoresService {
     await this.createNewVinculo(objeto, sujeto);
   }
 
-  private validateFechaFabricacion(fecha_fabricacion: number){
-    const fabStr = fecha_fabricacion.toString();
-    const anio = Number(fabStr.slice(0, 4));
-    const mes = Number(fabStr.slice(4, 6));
+  private validateFechaFabricacion(fechaFabricacion: string){
+    const anio = Number(fechaFabricacion.slice(0, 4));
+    const mes = Number(fechaFabricacion.slice(4, 6));
     const hoy = new Date();
     
     if (mes < 1 || mes > 12 || anio > hoy.getFullYear() || (anio === hoy.getFullYear() && mes > hoy.getMonth() + 1)) {
@@ -73,7 +84,7 @@ export class AutomotoresService {
       numeroChasis: dto.numeroChasis,
       numeroMotor: dto.numeroMotor,
       color: dto.color,
-      fechaFabricacion: dto.fechaFabricacion,
+      fechaFabricacion: Number(dto.fechaFabricacion),
       objetoValor: objeto,
     });
     
@@ -92,7 +103,7 @@ export class AutomotoresService {
 
     if(dto.fechaFabricacion){
       this.validateFechaFabricacion(dto.fechaFabricacion);
-      oldAutomotor.fechaFabricacion = dto.fechaFabricacion;
+      oldAutomotor.fechaFabricacion = Number(dto.fechaFabricacion);
     }
     
     return await this.automotorRepo.save(oldAutomotor);

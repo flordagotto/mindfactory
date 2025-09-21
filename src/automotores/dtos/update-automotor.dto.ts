@@ -26,10 +26,11 @@ export class UpdateAutomotorDto {
   @IsString()
   @Length(6, 6, { message: 'La fecha de fabricación debe tener exactamente 6 caracteres (YYYYMM)' })
   @Matches(/^(19|20)\d{2}(0[1-9]|1[0-2])$/, { message: 'La fecha de fabricación debe estar en formato YYYYMM válido' })
-  fechaFabricacion?: number;
+  fechaFabricacion?: string;
 
   @ApiProperty({ example: '20304050607', description: 'CUIT del dueño del automotor' })
   @IsString()
+  @IsOptional()
   @Length(11, 11, { message: 'El CUIT debe tener exactamente 11 dígitos' })
   @Matches(/^\d{11}$/, { message: 'El CUIT debe contener solo números' })
   @CuitIsValid()
