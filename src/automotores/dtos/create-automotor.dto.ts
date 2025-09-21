@@ -1,8 +1,17 @@
-import { IsString, Matches, IsOptional, MaxLength, IsDate } from 'class-validator';
+import { IsString, Matches, IsOptional, MaxLength, IsDate, Length } from 'class-validator';
 import { VehicleDomainIsValid, DateIsValid } from '../validators/automotores.validator';
 import { NumberIsIntegerPositive } from '../../common/validators/validator';
+import { CuitIsValid } from 'src/sujetos/validators/sujeto.validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAutomotorDto {
+  @ApiProperty({ example: '12345678901', description: 'CUIT del dueño del automotor' })
+  @IsString()
+  @Length(11, 11, { message: 'El CUIT debe tener exactamente 11 dígitos' })
+  @Matches(/^\d{11}$/, { message: 'El CUIT debe contener solo números' })
+  @CuitIsValid()
+  spo_cuit: string;
+  
   @IsString()
   @VehicleDomainIsValid({ message: 'Dominio no cumple el formato requerido' })
   dominio: string;
@@ -25,7 +34,7 @@ export class CreateAutomotorDto {
   color?: string;
   
   @DateIsValid({ message: 'La fecha de fabricación no cumple el formato requerido' })
-  fecha_fabricacion: Date;
+  fecha_fabricacion: number;
   
   @IsOptional()
   @IsDate({ message: 'Debe ser una fecha válida' })
