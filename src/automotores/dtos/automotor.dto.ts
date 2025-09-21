@@ -4,5 +4,5 @@ import { CreateAutomotorDto } from './create-automotor.dto';
 
 export class AutomotorDto extends PartialType(CreateAutomotorDto) {
   @NumberIsIntegerPositive()
-  atr_id: number;
+  id: number;
 }

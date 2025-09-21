@@ -20,10 +20,10 @@ export class AutomotoresService {
   async createAutomotor(dto: CreateAutomotorDto) {
     await this.validateDominio(dto.dominio);
 
-    const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.spo_cuit });
+    const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.cuitDuenio });
     if (!sujeto) throw new UnprocessableEntityException('No existe sujeto con ese CUIT');
 
-    this.validateFechaFabricacion(dto.fecha_fabricacion);
+    this.validateFechaFabricacion(dto.fechaFabricacion);
 
     let objeto = await this.objetoRepo.findOne({ where: { tipo: 'AUTOMOTOR', codigo: dto.dominio } });
 
@@ -70,10 +70,10 @@ export class AutomotoresService {
   private async createAutomotorEntity(dto: CreateAutomotorDto, objeto: ObjetoDeValor){
     let automotor = this.automotorRepo.create({
       dominio: dto.dominio,
-      numeroChasis: dto.numero_chasis,
-      numeroMotor: dto.numero_motor,
+      numeroChasis: dto.numeroChasis,
+      numeroMotor: dto.numeroMotor,
       color: dto.color,
-      fechaFabricacion: dto.fecha_fabricacion,
+      fechaFabricacion: dto.fechaFabricacion,
       objetoValor: objeto,
     });
     

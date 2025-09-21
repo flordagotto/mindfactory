@@ -10,7 +10,7 @@ export class CreateAutomotorDto {
   @Length(11, 11, { message: 'El CUIT debe tener exactamente 11 dígitos' })
   @Matches(/^\d{11}$/, { message: 'El CUIT debe contener solo números' })
   @CuitIsValid()
-  spo_cuit: string;
+  cuitDuenio: string;
   
   @ApiProperty({ example: 'AA999AA', description: 'Dominio patente del automotor' })
   @IsString()
@@ -22,14 +22,14 @@ export class CreateAutomotorDto {
   @MaxLength(25)
   @IsString()
   @Matches(/^[A-Z0-9]*$/i, { message: 'Solo letras y números permitidos' })
-  numero_chasis?: string;
+  numeroChasis?: string;
 
   @ApiProperty({ example: 'MTR987654321', description: 'Número de motor del automotor' })
   @IsOptional()
   @MaxLength(25)
   @IsString()
   @Matches(/^[A-Z0-9]*$/i, { message: 'Solo letras y números permitidos' })
-  numero_motor?: string;
+  numeroMotor?: string;
 
   @ApiProperty({ example: 'Rojo', description: 'Color del automotor' })
   @IsOptional()
@@ -42,11 +42,11 @@ export class CreateAutomotorDto {
   @IsString()
   @Length(6, 6, { message: 'La fecha de fabricación debe tener exactamente 6 caracteres (YYYYMM)' })
   @Matches(/^(19|20)\d{2}(0[1-9]|1[0-2])$/, { message: 'La fecha de fabricación debe estar en formato YYYYMM válido' })
-  fecha_fabricacion: number;
+  fechaFabricacion: number;
   
   @ApiProperty({ example: '2025/09/20', description: 'Fecha de alta de registro del automotor' })
   @IsOptional()
   @Type(() => Date)  
   @IsDate({ message: 'Debe ser una fecha válida' })
-  fecha_alto_registro: Date;
+  fechaAltoRegistro: Date;
 }
