@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Post, Put, Query } from '@nestjs/common';
 import { AutomotoresService } from './automotores.service';
 import { CreateAutomotorDto } from './dtos/create-automotor.dto';
 import { UpdateAutomotorDto } from './dtos/update-automotor.dto';
@@ -15,5 +15,10 @@ export class AutomotoresController {
   @Put()
   update(@Query('dominio') dominio: string, @Body() dto: UpdateAutomotorDto) {
     return this.automotoresService.updateAutomotor(dominio, dto);
+  }
+  
+  @Delete()
+  delete(@Query('dominio') dominio: string) {
+    return this.automotoresService.deleteAutomotor(dominio);
   }
 }

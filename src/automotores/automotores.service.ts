@@ -63,6 +63,25 @@ export class AutomotoresService {
     }
   }
 
+  async deleteAutomotor(dominio: string) {
+    const objeto = await this.objetoRepo.findOne({
+      where: { tipo: 'AUTOMOTOR', codigo: dominio },
+      relations: ['automotor', 'vinculos'],
+    });
+
+    if (!objeto) throw new UnprocessableEntityException('No existe objeto de valor asociado al automotor');
+
+    if (objeto.vinculos?.length) {
+      await this.vinculoRepo.remove(objeto.vinculos);
+    }
+
+    if (objeto.automotor) {
+      await this.automotorRepo.remove(objeto.automotor);
+    }
+
+    await this.objetoRepo.remove(objeto);
+  }
+
   private async setNewOwnerToObjetoDeValor(objeto: ObjetoDeValor, sujeto: Sujeto){
     await this.closePreviousVinculo(objeto);
     await this.createNewVinculo(objeto, sujeto);
