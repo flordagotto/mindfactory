@@ -19,13 +19,13 @@ export class Automotor {
   dominio: string;
 
   @Column({ name: 'atr_numero_chasis', type: 'varchar', length: 25, nullable: true })
-  numeroChasis: string | undefined;
+  numeroChasis?: string | undefined;
 
   @Column({ name: 'atr_numero_motor', type: 'varchar', length: 25, nullable: true })
-  numeroMotor: string | undefined;
+  numeroMotor?: string | undefined;
 
   @Column({ name: 'atr_color', type: 'varchar', length: 40, nullable: true })
-  color: string | undefined;
+  color?: string | undefined;
 
   @Column({ name: 'atr_fecha_fabricacion', type: 'int' })
   fechaFabricacion: number;

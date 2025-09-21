@@ -7,6 +7,7 @@ import { Sujeto } from 'src/sujetos/domain/sujeto.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateAutomotorDto } from './dtos/create-automotor.dto';
 import { UpdateAutomotorDto } from './dtos/update-automotor.dto';
+import { AutomotorDto } from './dtos/automotor.dto';
 
 @Injectable()
 export class AutomotoresService {
@@ -80,6 +81,52 @@ export class AutomotoresService {
     }
 
     await this.objetoRepo.remove(objeto);
+  }
+
+  async getAllAutomotores() {
+    const automotores = await this.automotorRepo.find({
+      relations: ['objetoValor', 'objetoValor.vinculos', 'objetoValor.vinculos.sujeto'],
+    });
+
+    const automotoresDto: AutomotorDto[] = automotores.map((a) => {
+      const activeVinculo = a.objetoValor.vinculos.find(
+        (v) => v.responsable === 'S' && !v.fechaFin
+      );
+
+      return {
+        id: a.id,
+        dominio: a.dominio,
+        numeroChasis: a.numeroChasis,
+        numeroMotor: a.numeroMotor,
+        color: a.color,
+        fechaFabricacion: a.fechaFabricacion,
+        fechaAltoRegistro: a.fechaAltaRegistro,
+        objetoDeValor: {
+          id: a.objetoValor.id,
+          tipo: a.objetoValor.tipo,
+          codigo: a.objetoValor.codigo,
+          descripcion: a.objetoValor.descripcion
+        },
+        sujeto: activeVinculo
+          ? {
+              id: activeVinculo.sujeto.id,
+              cuit: activeVinculo.sujeto.cuit,
+              denominacion: activeVinculo.sujeto.denominacion,
+            }
+          : null,
+        vinculos: a.objetoValor.vinculos.map((v) => (
+          {
+            tipoVinculo: v.tipoVinculo,
+            porcentaje: v.porcentaje,
+            responsable: v.responsable,
+            fechaInicio: v.fechaInicio,
+            fechaFin: v.fechaFin
+          }
+        ))
+      };
+    });
+
+    return automotoresDto;
   }
 
   private async setNewOwnerToObjetoDeValor(objeto: ObjetoDeValor, sujeto: Sujeto){

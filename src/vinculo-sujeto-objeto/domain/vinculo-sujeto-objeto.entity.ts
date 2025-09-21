@@ -24,13 +24,13 @@ export class VinculoSujetoObjeto {
   tipoVinculo: string;
 
   @Column({ name: 'vso_porcentaje', type: 'numeric', precision: 5, scale: 2 })
-  porcentaje?: number;
+  porcentaje: number;
 
   @Column({ name: 'vso_responsable', type: 'char', length: 1, default: '0' })
   responsable: string; 
 
   @Column({ name: 'vso_fecha_inicio', type: 'date', nullable: true })
-  fechaInicio?: Date;
+  fechaInicio: Date;
 
   @Column({ name: 'vso_fecha_fin', type: 'date', nullable: true })
   fechaFin?: Date;
