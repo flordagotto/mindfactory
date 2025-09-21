@@ -92,20 +92,41 @@ export class AutomotoresService {
       const activeVinculo = a.objetoValor.vinculos.find(
         (v) => v.responsable === 'S' && !v.fechaFin
       );
+      return this.getAutomotorDto(a, activeVinculo);
+    });
 
-      return {
-        id: a.id,
-        dominio: a.dominio,
-        numeroChasis: a.numeroChasis,
-        numeroMotor: a.numeroMotor,
-        color: a.color,
-        fechaFabricacion: a.fechaFabricacion,
-        fechaAltoRegistro: a.fechaAltaRegistro,
+    return automotoresDto;
+  }
+
+  async getAutomotorByDominio(dominio: string) {
+  const automotor = await this.automotorRepo.findOne({
+    where: { dominio },
+    relations: ['objetoValor', 'objetoValor.vinculos', 'objetoValor.vinculos.sujeto'],
+  });
+
+  if (!automotor) throw new NotFoundException('Automotor no encontrado');
+
+  const activeVinculo = automotor.objetoValor.vinculos.find(
+    (v) => v.responsable === 'S' && !v.fechaFin
+  );
+
+  return this.getAutomotorDto(automotor, activeVinculo);
+}
+
+  private getAutomotorDto(automotorEntity: Automotor, activeVinculo: VinculoSujetoObjeto | undefined){
+    return {
+        id: automotorEntity.id,
+        dominio: automotorEntity.dominio,
+        numeroChasis: automotorEntity.numeroChasis,
+        numeroMotor: automotorEntity.numeroMotor,
+        color: automotorEntity.color,
+        fechaFabricacion: automotorEntity.fechaFabricacion,
+        fechaAltoRegistro: automotorEntity.fechaAltaRegistro,
         objetoDeValor: {
-          id: a.objetoValor.id,
-          tipo: a.objetoValor.tipo,
-          codigo: a.objetoValor.codigo,
-          descripcion: a.objetoValor.descripcion
+          id: automotorEntity.objetoValor.id,
+          tipo: automotorEntity.objetoValor.tipo,
+          codigo: automotorEntity.objetoValor.codigo,
+          descripcion: automotorEntity.objetoValor.descripcion
         },
         sujeto: activeVinculo
           ? {
@@ -114,7 +135,7 @@ export class AutomotoresService {
               denominacion: activeVinculo.sujeto.denominacion,
             }
           : null,
-        vinculos: a.objetoValor.vinculos.map((v) => (
+        vinculos: automotorEntity.objetoValor.vinculos.map((v) => (
           {
             tipoVinculo: v.tipoVinculo,
             porcentaje: v.porcentaje,
@@ -124,9 +145,6 @@ export class AutomotoresService {
           }
         ))
       };
-    });
-
-    return automotoresDto;
   }
 
   private async setNewOwnerToObjetoDeValor(objeto: ObjetoDeValor, sujeto: Sujeto){
