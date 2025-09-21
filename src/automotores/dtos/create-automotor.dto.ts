@@ -1,5 +1,5 @@
 import { IsString, Matches, IsOptional, MaxLength, IsDate, Length } from 'class-validator';
-import { VehicleDomainIsValid, DateIsValid } from '../validators/automotores.validator';
+import { VehicleDomainIsValid } from '../validators/automotores.validator';
 import { CuitIsValid } from 'src/sujetos/validators/sujeto.validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
@@ -17,25 +17,31 @@ export class CreateAutomotorDto {
   @VehicleDomainIsValid({ message: 'Dominio no cumple el formato requerido' })
   dominio: string;
 
-  @ApiProperty({ example: '123ABC', description: 'Número de chasis del automotor' })
+  @ApiProperty({ example: '8ABCD123456789XYZ', description: 'Número de chasis del automotor' })
   @IsOptional()
   @MaxLength(25)
+  @IsString()
   @Matches(/^[A-Z0-9]*$/i, { message: 'Solo letras y números permitidos' })
   numero_chasis?: string;
 
-  @ApiProperty({ example: '456DEF', description: 'Número de motor del automotor' })
+  @ApiProperty({ example: 'MTR987654321', description: 'Número de motor del automotor' })
   @IsOptional()
   @MaxLength(25)
+  @IsString()
   @Matches(/^[A-Z0-9]*$/i, { message: 'Solo letras y números permitidos' })
   numero_motor?: string;
 
   @ApiProperty({ example: 'Rojo', description: 'Color del automotor' })
   @IsOptional()
+  @IsString()
   @MaxLength(40)
   color?: string;
   
-  @ApiProperty({ example: 200006, description: 'Fecha de fabricación del automotor' })
-  @DateIsValid({ message: 'La fecha de fabricación no cumple el formato requerido' })
+  @ApiProperty({ example: '202509', description: 'Fecha de fabricación en formato YYYYMM' })
+  @IsOptional()
+  @IsString()
+  @Length(6, 6, { message: 'La fecha de fabricación debe tener exactamente 6 caracteres (YYYYMM)' })
+  @Matches(/^(19|20)\d{2}(0[1-9]|1[0-2])$/, { message: 'La fecha de fabricación debe estar en formato YYYYMM válido' })
   fecha_fabricacion: number;
   
   @ApiProperty({ example: '2025/09/20', description: 'Fecha de alta de registro del automotor' })
