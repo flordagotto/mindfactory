@@ -1,0 +1,37 @@
+<h2>Lista de Automotores</h2>
+
+<p *ngIf="mensaje" style="color: red;">{{ mensaje }}</p>
+
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+  <thead>
+    <tr>
+      <th>Dominio</th>
+      <th>N° Chasis</th>
+      <th>N° Motor</th>
+      <th>Color</th>
+      <th>Fecha Fabricación</th>
+      <th>CUIT Dueño</th>
+      <th>Denominación Dueño</th>
+      <th>Objeto de Valor</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let auto of automotores">
+      <td>{{ auto.dominio }}</td>
+      <td>{{ auto.numeroChasis || '-' }}</td>
+      <td>{{ auto.numeroMotor || '-' }}</td>
+      <td>{{ auto.color || '-' }}</td>
+      <td>{{ auto.fechaFabricacion }}</td>
+      <td>{{ auto.sujeto?.cuit || '-' }}</td>
+      <td>{{ auto.sujeto?.denominacion || '-' }}</td>
+      <td>{{ auto.objetoDeValor?.codigo }} - {{ auto.objetoDeValor?.descripcion || '-' }}</td>
+      <td>
+        <button (click)="borrar(auto.dominio)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<button type="button" (click)="irAForm()">Crear Automotores</button>
+<button type="button" (click)="irACrearSujeto()">Crear Sujeto</button>

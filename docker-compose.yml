@@ -13,7 +13,7 @@ services:
       - db_data:/var/lib/postgresql/data
 
   backend:
-    build: .
+    build: ./backend
     environment:
       DB_HOST: db    
       DB_PORT: 5432
@@ -24,6 +24,13 @@ services:
       - "3000:3000"
     depends_on:
       - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
 
 volumes:
   db_data:
