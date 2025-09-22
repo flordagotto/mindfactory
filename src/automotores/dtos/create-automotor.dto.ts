@@ -43,10 +43,4 @@ export class CreateAutomotorDto {
   @Length(6, 6, { message: 'La fecha de fabricación debe tener exactamente 6 caracteres (YYYYMM)' })
   @Matches(/^(19|20)\d{2}(0[1-9]|1[0-2])$/, { message: 'La fecha de fabricación debe estar en formato YYYYMM válido' })
   fechaFabricacion: string;
-  
-  @ApiProperty({ example: '2025/09/20', description: 'Fecha de alta de registro del automotor' })
-  @IsOptional()
-  @Type(() => Date)  
-  @IsDate({ message: 'Debe ser una fecha válida' })
-  fechaAltoRegistro: Date;
 }

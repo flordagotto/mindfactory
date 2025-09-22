@@ -30,7 +30,7 @@ export class Automotor {
   @Column({ name: 'atr_fecha_fabricacion', type: 'int' })
   fechaFabricacion: number;
 
-  @Column({ name: 'atr_fecha_alta_registro', type: 'timestamptz' })
+  @Column({ name: 'atr_fecha_alta_registro', type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   fechaAltaRegistro: Date;
   
   @OneToOne(() => ObjetoDeValor, (ovp) => ovp.automotor, { cascade: true })
