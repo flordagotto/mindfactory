@@ -17,8 +17,8 @@ export class AutomotoresController {
     return this.automotoresService.updateAutomotor(dominio, dto);
   }
   
-  @Delete()
-  delete(@Query('dominio') dominio: string) {
+  @Delete(':dominio')
+  delete(@Param('dominio') dominio: string) {
     return this.automotoresService.deleteAutomotor(dominio);
   }
   
