@@ -18,6 +18,11 @@ async function bootstrap() {
       },
   }));
 
+  app.enableCors({
+    origin: 'http://localhost:4200',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  });
+
   const config = new DocumentBuilder()
     .setTitle('API de Sujetos')
     .setDescription('API para gestionar sujetos y sus vínculos')

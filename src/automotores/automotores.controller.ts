@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { AutomotoresService } from './automotores.service';
 import { CreateAutomotorDto } from './dtos/create-automotor.dto';
 import { UpdateAutomotorDto } from './dtos/update-automotor.dto';
@@ -12,8 +12,8 @@ export class AutomotoresController {
     return this.automotoresService.createAutomotor(dto);
   }
 
-  @Put()
-  update(@Query('dominio') dominio: string, @Body() dto: UpdateAutomotorDto) {
+  @Put(':dominio')
+  update(@Param('dominio') dominio: string, @Body() dto: UpdateAutomotorDto) {
     return this.automotoresService.updateAutomotor(dominio, dto);
   }
   
@@ -27,8 +27,8 @@ export class AutomotoresController {
     return this.automotoresService.getAllAutomotores();
   }
   
-  @Get('dominio')
-  getByDominio(@Query('dominio') dominio: string) {
+  @Get(':dominio')
+  getByDominio(@Param('dominio') dominio: string) {
     return this.automotoresService.getAutomotorByDominio(dominio);
   }
 }
