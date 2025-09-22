@@ -9,7 +9,6 @@ export class AutomotorDto{
   numeroMotor?: string;
   color?: string;
   fechaFabricacion: number;
-  fechaAltoRegistro: Date;
   objetoDeValor: ObjetoDeValorDto;
   sujeto?: SujetoDto | null;
   vinculos?: VinculoSujetoObjetoDto[];
