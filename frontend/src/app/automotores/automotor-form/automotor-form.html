@@ -50,11 +50,8 @@
   </div>
   <div style="margin-bottom: 12px;">
     <label>CUIT Dueño:</label><br/>
-    <input formControlName="cuit" required />
+    <input formControlName="cuit" />
     <button type="button" (click)="buscarSujeto()">Buscar Sujeto</button>
-    <small *ngIf="cuit?.errors?.['required'] && cuit?.touched" style="color:red">
-      El CUIT es obligatorio
-    </small>
     <small *ngIf="cuit?.errors?.['pattern']" style="color:red">
       El CUIT debe tener exactamente 11 dígitos numéricos
     </small>

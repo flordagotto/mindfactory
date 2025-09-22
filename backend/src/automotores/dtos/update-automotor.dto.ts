@@ -31,8 +31,6 @@ export class UpdateAutomotorDto {
   @ApiProperty({ example: '20304050607', description: 'CUIT del dueño del automotor' })
   @IsString()
   @IsOptional()
-  @Length(11, 11, { message: 'El CUIT debe tener exactamente 11 dígitos' })
-  @Matches(/^\d{11}$/, { message: 'El CUIT debe contener solo números' })
   @CuitIsValid()
   cuitDuenio?: string;
 }

@@ -7,8 +7,7 @@ import { Type } from 'class-transformer';
 export class CreateAutomotorDto {
   @ApiProperty({ example: '12345678901', description: 'CUIT del dueño del automotor' })
   @IsString()
-  @Length(11, 11, { message: 'El CUIT debe tener exactamente 11 dígitos' })
-  @Matches(/^\d{11}$/, { message: 'El CUIT debe contener solo números' })
+  @IsOptional()
   @CuitIsValid()
   cuitDuenio: string;
   

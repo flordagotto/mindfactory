@@ -21,9 +21,6 @@ export class AutomotoresService {
   async createAutomotor(dto: CreateAutomotorDto) {
     await this.validateDominio(dto.dominio);
 
-    const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.cuitDuenio });
-    if (!sujeto) throw new UnprocessableEntityException('No existe sujeto con ese CUIT');
-
     this.validateFechaFabricacion(dto.fechaFabricacion);
 
     let objeto = await this.objetoRepo.findOne({ where: { tipo: 'AUTOMOTOR', codigo: dto.dominio } });
@@ -33,8 +30,13 @@ export class AutomotoresService {
         objeto = await this.objetoRepo.save(objeto);
     }
 
+    if (dto.cuitDuenio != null && dto.cuitDuenio != ""){
+      const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.cuitDuenio });
+      if (!sujeto) throw new UnprocessableEntityException('No existe sujeto con ese CUIT');
+      await this.setNewOwnerToObjetoDeValor(objeto, sujeto);
+    }
+
     await this.createAutomotorEntity(dto, objeto);
-    await this.setNewOwnerToObjetoDeValor(objeto, sujeto);
   }
 
   async updateAutomotor(dominio: string, dto: UpdateAutomotorDto){
@@ -42,26 +44,24 @@ export class AutomotoresService {
         
     if (!automotor) throw new NotFoundException(`Automotor con dominio ${dominio} no encontrado`);
     
-    const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.cuitDuenio });
-    if (!sujeto) throw new UnprocessableEntityException('No existe sujeto con ese CUIT');
-
     let objeto = await this.objetoRepo.findOne({ 
       where: { tipo: 'AUTOMOTOR', codigo: dominio },
       relations: ['vinculos', 'vinculos.sujeto']
     });
     if (!objeto) throw new UnprocessableEntityException('No existe objeto de valor asociado al automotor');
 
-    await this.updateAutomotorEntity(dto, automotor);
-
     const activeVinculo = objeto.vinculos.find(
       (v) => v.fechaFin === null || v.fechaFin === undefined
     );
 
-    if (activeVinculo) {
-      if (activeVinculo.sujeto.cuit !== dto.cuitDuenio) {
+    if (dto.cuitDuenio != null && dto.cuitDuenio != ""){
+      const sujeto = await this.sujetoRepo.findOneBy({ cuit: dto.cuitDuenio });
+      if (!sujeto) throw new UnprocessableEntityException('No existe sujeto con ese CUIT');
+      if(activeVinculo && activeVinculo.sujeto.cuit !== dto.cuitDuenio)
         await this.setNewOwnerToObjetoDeValor(objeto, sujeto);
-      }
     }
+
+    await this.updateAutomotorEntity(dto, automotor);
   }
 
   async deleteAutomotor(dominio: string) {

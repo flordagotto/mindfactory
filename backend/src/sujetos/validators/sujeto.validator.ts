@@ -9,7 +9,9 @@ export function CuitIsValid(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(value: any) {
+          if (!value || value == "") return true;
           if (!/^\d{11}$/.test(value)) return false;
+          if (value.length != 11) return false;
 
           const coef = [5,4,3,2,7,6,5,4,3,2];
           let sum = 0;

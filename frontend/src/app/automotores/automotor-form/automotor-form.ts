@@ -21,7 +21,6 @@ export class AutomotorFormComponent {
     cuit: [
       '',
       [
-        Validators.required,
         Validators.pattern(/^\d{11}$/), 
       ],
     ],
@@ -47,7 +46,7 @@ export class AutomotorFormComponent {
         Validators.pattern(/^(19|20)\d{2}(0[1-9]|1[0-2])$/), 
       ],
     ],
-    denominacion: ['', Validators.required]
+    denominacion: ['']
   });
   }
 
